@@ -184,4 +184,13 @@ class CollectionTest extends TestCase
         self::assertNotNull($hobbies);
         assertEquals(["Racist", "Coding", "Coding", "Beat the Meat", "Beat the Meat", "Sleeping"], $hobbies->all());
     }
+
+    public function testJoinFunctionStringRepresentation()
+    {
+        $collection = collect(["Terry", "Andrew", "Racist", "Davis"]);
+
+        assertEquals("Terry-Andrew-Racist-Davis", $collection->join("-"));
+        assertEquals("Terry-Andrew-Racist_Davis", $collection->join("-", "_"));
+        assertEquals("Terry, Andrew, Racist and Davis", $collection->join(", ", " and "));
+    }
 }
