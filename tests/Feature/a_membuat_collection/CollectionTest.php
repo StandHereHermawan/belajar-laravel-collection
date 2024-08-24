@@ -15,4 +15,12 @@ class CollectionTest extends TestCase
         $this->assertNotNull($collection);
         $this->assertEquals([1, 2, 3, 4], $collection->all());
     }
+
+    public function testForEach(): void
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        foreach ($collection as $key => $value) {
+            $this->assertEquals($key + 1, $value);
+        }
+    }
 }
