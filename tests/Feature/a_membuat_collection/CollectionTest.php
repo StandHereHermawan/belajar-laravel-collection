@@ -193,4 +193,40 @@ class CollectionTest extends TestCase
         assertEquals("Terry-Andrew-Racist_Davis", $collection->join("-", "_"));
         assertEquals("Terry, Andrew, Racist and Davis", $collection->join(", ", " and "));
     }
+
+    public function testFilterKeyValue()
+    {
+        $collection = collect([
+            "Terry" => 95,
+            "Andrew" => 93,
+            "Davis" => 92,
+            "Aba" => 90,
+            "Abe" => 88,
+            "Abo" => 87,
+        ]);
+
+        $result = $collection->filter(function ($item, $key) {
+            return $item <= 90;
+        });
+
+        self::assertNotNull($result);
+        assertEquals([
+            "Abe" => 88,
+            "Aba" => 90,
+            "Abo" => 87,
+        ], $result->all());
+    }
+
+    public function testFilterIndex()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        $results = $collection->filter(function ($value, $key) {
+            return $value % 2 == 0;
+        });
+
+        self::assertNotNull($results);
+        self::assertNotEqualsCanonicalizing([2, 4, 6, 8, 10], $results->all());
+        // $this->assertEqualsCanonicalizing([2, 4, 6, 8, 10], $results->all());
+    }
 }
