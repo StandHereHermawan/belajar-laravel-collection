@@ -145,4 +145,43 @@ class CollectionTest extends TestCase
             "country" => "USA",
         ], $collection3->all());
     }
+
+    public function testCollapse()
+    {
+        $collection = collect([
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ]);
+
+        $result = $collection->collapse();
+
+        self::assertNotNull($result);
+        assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
+    }
+
+    public function testFlatMap()
+    {
+        $collection = collect([
+            [
+                "name" => "Terry",
+                "hobbies" => ["Racist", "Coding"]
+            ],
+            [
+                "name" => "Andrew",
+                "hobbies" => ["Coding", "Beat the Meat"]
+            ],
+            [
+                "name" => "Davis",
+                "hobbies" => ["Beat the Meat", "Sleeping"]
+            ],
+        ]);
+
+        $hobbies = $collection->flatMap(function ($item) {
+            return $item['hobbies'];
+        });
+
+        self::assertNotNull($hobbies);
+        assertEquals(["Racist", "Coding", "Coding", "Beat the Meat", "Beat the Meat", "Sleeping"], $hobbies->all());
+    }
 }
