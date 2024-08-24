@@ -229,4 +229,30 @@ class CollectionTest extends TestCase
         self::assertNotEqualsCanonicalizing([2, 4, 6, 8, 10], $results->all());
         // $this->assertEqualsCanonicalizing([2, 4, 6, 8, 10], $results->all());
     }
+
+    public function testPartition()
+    {
+        $collection = collect([
+            "aba" => 91,
+            "abo" => 90,
+            "abe" => 89,
+            "abi" => 89,
+        ]);
+
+        [$match, $didntMatch] = $collection->partition(function ($item, $key) {
+            return $item <= 90;
+        });
+
+        self::assertNotNull($match);
+        self::assertNotNull($didntMatch);
+        assertEquals([
+            "abo" => 90,
+            "abe" => 89,
+            "abi" => 89,
+        ], $match->all());
+
+        assertEquals([
+            "aba" => 91,
+        ], $didntMatch->all());
+    }
 }
