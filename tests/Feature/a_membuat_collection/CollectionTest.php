@@ -267,4 +267,141 @@ class CollectionTest extends TestCase
             return $value == "Terry";
         }));
     }
+
+    public function testGrouping()
+    {
+        $collection = collect([
+            [
+                "name" => "Arief",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Hilmi",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Thoriq",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Bangun",
+                "department" => "HR"
+            ],
+        ]);
+
+        ###
+
+        $result = $collection->groupBy("department");
+
+        self::assertNotNull($result);
+        self::assertEquals([
+            "IT" => collect([
+                [
+                    "name" => "Arief",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Hilmi",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Thoriq",
+                    "department" => "IT"
+                ]
+            ]),
+            "HR" => collect([
+                [
+                    "name" => "Bangun",
+                    "department" => "HR"
+                ]
+            ])
+        ], $result->all());
+
+        ###
+
+        self::assertEquals([
+            "IT" => collect([
+                [
+                    "name" => "Arief",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Hilmi",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Thoriq",
+                    "department" => "IT"
+                ]
+            ]),
+            "HR" => collect([
+                [
+                    "name" => "Bangun",
+                    "department" => "HR"
+                ]
+            ])
+        ], $collection->groupBy(function ($value, $key) {
+            return $value['department'];
+        })->all());
+
+        ###
+
+        $result = $collection->groupBy(function ($value, $key) {
+            return $value['department'];
+        });
+
+        self::assertNotNull($result);
+        self::assertEquals([
+            "IT" => collect([
+                [
+                    "name" => "Arief",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Hilmi",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Thoriq",
+                    "department" => "IT"
+                ]
+            ]),
+            "HR" => collect([
+                [
+                    "name" => "Bangun",
+                    "department" => "HR"
+                ]
+            ])
+        ], $result->all());
+
+        ###
+
+        $result = $collection->groupBy(function ($value, $key) {
+            return strtolower($value['department']);
+        });
+
+        self::assertNotNull($result);
+        self::assertEquals([
+            "it" => collect([
+                [
+                    "name" => "Arief",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Hilmi",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Thoriq",
+                    "department" => "IT"
+                ]
+            ]),
+            "hr" => collect([
+                [
+                    "name" => "Bangun",
+                    "department" => "HR"
+                ]
+            ])
+        ], $result->all());
+    }
 }
