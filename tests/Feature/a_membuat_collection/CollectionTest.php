@@ -255,4 +255,16 @@ class CollectionTest extends TestCase
             "aba" => 91,
         ], $didntMatch->all());
     }
+
+    public function testTesting()
+    {
+        $collection = collect(["Terry", "Andrew", "System"]);
+
+        self::assertNotNull($collection);
+        self::assertTrue($collection->hasAny(0));
+        self::assertTrue($collection->contains("Terry"));
+        self::assertTrue($collection->contains(function ($value, $key) {
+            return $value == "Terry";
+        }));
+    }
 }
