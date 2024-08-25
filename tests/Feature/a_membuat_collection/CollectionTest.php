@@ -486,4 +486,26 @@ class CollectionTest extends TestCase
         self::assertNotNull($result);
         $this->assertEqualsCanonicalizing([2 => 3, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 8, 8 => 9], $result->all());
     }
+
+    public function testChunked()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        $result = $collection->chunk(3);
+
+        self::assertNotNull($result);
+        self::assertEqualsCanonicalizing([1, 2, 3], $result->all()[0]->all());
+        self::assertEqualsCanonicalizing([3 => 4, 4 => 5, 5 => 6], $result->all()[1]->all());
+        self::assertEqualsCanonicalizing([6 => 7, 7 => 8, 8 => 9], $result->all()[2]->all());
+
+        ###
+
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        $result = $collection->chunk(3);
+
+        self::assertNotNull($result);
+        self::assertEqualsCanonicalizing([1, 2, 3], $result->all()[0]->all());
+        self::assertEqualsCanonicalizing([3 => 4, 4 => 5, 5 => 6], $result->all()[1]->all());
+        self::assertEqualsCanonicalizing([6 => 7, 7 => 8, 8 => 9], $result->all()[2]->all());
+        self::assertEqualsCanonicalizing([9 => 10], $result->all()[3]->all());
+    }
 }
