@@ -7,9 +7,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertEqualsCanonicalizing;
-
 class CollectionTest extends TestCase
 {
     public function testCollection(): void
@@ -32,11 +29,11 @@ class CollectionTest extends TestCase
     {
         $collection = collect([]);
         $collection->push(1, 2, 3);
-        assertEqualsCanonicalizing([1, 2, 3], $collection->all());
+        $this->assertEqualsCanonicalizing([1, 2, 3], $collection->all());
 
         $result = $collection->pop();
-        assertEquals(3, $result);
-        assertEqualsCanonicalizing([1, 2], $collection->all());
+        $this->assertEquals(3, $result);
+        $this->assertEqualsCanonicalizing([1, 2], $collection->all());
     }
 
     public function testMapFunc()
@@ -68,7 +65,7 @@ class CollectionTest extends TestCase
         });
 
         $this->assertNotNull($result);
-        assertEquals([
+        $this->assertEquals([
             new Person("Terry Davis"),
             new Person("Andrew Terry")
         ], $result->all());
@@ -96,7 +93,7 @@ class CollectionTest extends TestCase
         });
 
         self::assertNotNull($result);
-        assertEquals([
+        self::assertEquals([
             "IT" => collect(["Terry", "Davis"]),
             "HR" => collect(["Budi"])
         ], $result->all());
@@ -110,7 +107,7 @@ class CollectionTest extends TestCase
         $collection3 = $collection1->zip($collection2);
 
         self::assertNotNull($collection3);
-        assertEquals(
+        self::assertEquals(
             [
                 collect([1, 4]),
                 collect([2, 5]),
@@ -128,8 +125,8 @@ class CollectionTest extends TestCase
         $collection3 = $collection1->concat($collection2);
 
         self::assertNotNull($collection3);
-        assertEquals([1, 2, 3, 4, 5, 6], $collection3->all());
-        assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6], $collection3->all());
+        self::assertEquals([1, 2, 3, 4, 5, 6], $collection3->all());
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6], $collection3->all());
     }
 
     public function testCombine()
@@ -140,7 +137,7 @@ class CollectionTest extends TestCase
         $collection3 = collect($collection1)->combine($collection2);
 
         self::assertNotNull($collection3);
-        assertEquals([
+        self::assertEquals([
             "name" => "Terry",
             "country" => "USA",
         ], $collection3->all());
@@ -157,7 +154,7 @@ class CollectionTest extends TestCase
         $result = $collection->collapse();
 
         self::assertNotNull($result);
-        assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
+        self::assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
     }
 
     public function testFlatMap()
@@ -182,16 +179,16 @@ class CollectionTest extends TestCase
         });
 
         self::assertNotNull($hobbies);
-        assertEquals(["Racist", "Coding", "Coding", "Beat the Meat", "Beat the Meat", "Sleeping"], $hobbies->all());
+        self::assertEquals(["Racist", "Coding", "Coding", "Beat the Meat", "Beat the Meat", "Sleeping"], $hobbies->all());
     }
 
     public function testJoinFunctionStringRepresentation()
     {
         $collection = collect(["Terry", "Andrew", "Racist", "Davis"]);
 
-        assertEquals("Terry-Andrew-Racist-Davis", $collection->join("-"));
-        assertEquals("Terry-Andrew-Racist_Davis", $collection->join("-", "_"));
-        assertEquals("Terry, Andrew, Racist and Davis", $collection->join(", ", " and "));
+        self::assertEquals("Terry-Andrew-Racist-Davis", $collection->join("-"));
+        self::assertEquals("Terry-Andrew-Racist_Davis", $collection->join("-", "_"));
+        self::assertEquals("Terry, Andrew, Racist and Davis", $collection->join(", ", " and "));
     }
 
     public function testFilterKeyValue()
@@ -210,7 +207,7 @@ class CollectionTest extends TestCase
         });
 
         self::assertNotNull($result);
-        assertEquals([
+        self::assertEquals([
             "Abe" => 88,
             "Aba" => 90,
             "Abo" => 87,
@@ -227,7 +224,7 @@ class CollectionTest extends TestCase
 
         self::assertNotNull($results);
         self::assertNotEqualsCanonicalizing([2, 4, 6, 8, 10], $results->all());
-        // $this->assertEqualsCanonicalizing([2, 4, 6, 8, 10], $results->all());
+        $this->assertEqualsCanonicalizing([1 => 2, 3 => 4, 5 => 6, 7 => 8, 9 => 10], $results->all());
     }
 
     public function testPartition()
@@ -245,13 +242,13 @@ class CollectionTest extends TestCase
 
         self::assertNotNull($match);
         self::assertNotNull($didntMatch);
-        assertEquals([
+        self::assertEquals([
             "abo" => 90,
             "abe" => 89,
             "abi" => 89,
         ], $match->all());
 
-        assertEquals([
+        self::assertEquals([
             "aba" => 91,
         ], $didntMatch->all());
     }
@@ -403,5 +400,5 @@ class CollectionTest extends TestCase
                 ]
             ])
         ], $result->all());
-    }
+    }    
 }
