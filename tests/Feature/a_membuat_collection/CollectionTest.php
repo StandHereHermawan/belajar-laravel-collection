@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+use function PHPUnit\Framework\assertEquals;
+
 class CollectionTest extends TestCase
 {
     public function testCollection(): void
@@ -507,5 +509,39 @@ class CollectionTest extends TestCase
         self::assertEqualsCanonicalizing([3 => 4, 4 => 5, 5 => 6], $result->all()[1]->all());
         self::assertEqualsCanonicalizing([6 => 7, 7 => 8, 8 => 9], $result->all()[2]->all());
         self::assertEqualsCanonicalizing([9 => 10], $result->all()[3]->all());
+    }
+
+    public function testFirst()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+        $result = $collection->first();
+
+        self::assertNotNull($result);
+        self::assertEquals(1, $result);
+
+        $result = $collection->first(function ($value, $key) {
+            return $value > 5;
+        });
+
+        self::assertNotNull($result);
+        assertEquals(6, $result);
+    }
+
+    public function testLast()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+        $result = $collection->last();
+
+        self::assertNotNull($result);
+        self::assertEquals(9, $result);
+
+        $result = $collection->last(function ($value, $key) {
+            return $value < 5;
+        });
+
+        self::assertNotNull($result);
+        assertEquals(4, $result);
     }
 }
