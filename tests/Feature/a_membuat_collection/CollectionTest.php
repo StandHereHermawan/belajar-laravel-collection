@@ -562,4 +562,20 @@ class CollectionTest extends TestCase
             self::assertTrue(in_array($result, [1, 2, 3, 4, 5, 6, 7, 8, 9]));
         }
     }
+
+    public function testCheckingExistence()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+        self::assertTrue($collection->isNotEmpty());
+        self::assertFalse($collection->isEmpty());
+        self::assertTrue($collection->contains(8));
+        self::assertFalse($collection->contains(10));
+
+        for ($i = 0; $i < $collection->count(); $i++) {
+            self::assertTrue($collection->contains(function ($value, $key) use ($i) {
+                return $value == ($i + 1);
+            }));
+        }
+    }
 }
