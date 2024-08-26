@@ -589,8 +589,33 @@ class CollectionTest extends TestCase
         self::assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
 
         $result = $collection->sortDesc();
-        
+
         self::assertNotNull($result);
         self::assertEqualsCanonicalizing([9, 8, 7, 6, 5, 4, 3, 2, 1], $result->all());
+    }
+
+    public function testAggregate()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+        $result = $collection->sum();
+
+        self::assertNotNull($result);
+        self::assertEquals(45, $result);
+
+        $result = $collection->avg();
+
+        self::assertNotNull($result);
+        self::assertEquals(5, $result);
+
+        $result = $collection->min();
+
+        self::assertNotNull($result);
+        self::assertEquals(1, $result);
+
+        $result = $collection->max();
+
+        self::assertNotNull($result);
+        self::assertEquals(9, $result);
     }
 }
